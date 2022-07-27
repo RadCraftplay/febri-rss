@@ -13,10 +13,6 @@ type CreateBookInput struct {
 	Author string `json:"author" binding:"required"`
 }
 
-type DeleteObjectInput struct {
-	Id uint `json:"id" binding:"required"`
-}
-
 // GET /books
 // Get all books
 func FindBooks(c *gin.Context) {

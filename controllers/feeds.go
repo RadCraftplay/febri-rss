@@ -12,6 +12,10 @@ type CreateFeedInput struct {
 	URL string `json:"url" binding:"required"`
 }
 
+type DeleteObjectInput struct {
+	Id uint `json:"id" binding:"required"`
+}
+
 // GET /feeds
 // Get all feeds
 func FindFeeds(c *gin.Context) {
