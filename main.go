@@ -12,9 +12,10 @@ func main() {
 
 	models.ConnectDatabase()
 
-	r.GET("/books", controllers.FindBooks)
-	r.POST("/books", controllers.CreateBook)
-	r.DELETE("/books", controllers.DeleteBook)
+	feeds := r.Group("feeds")
+	feeds.GET("", controllers.FindFeeds)
+	feeds.POST("", controllers.CreateFeed)
+	feeds.DELETE("", controllers.DeleteFeed)
 
 	r.Run(":2137")
 }
