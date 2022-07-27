@@ -16,6 +16,7 @@ func main() {
 	feeds.GET("", controllers.FindFeeds)
 	feeds.POST("", controllers.CreateFeed)
 	feeds.DELETE("", controllers.DeleteFeed)
+	feeds.PATCH("", controllers.PatchFeed)
 
 	r.Run(":2137")
 }

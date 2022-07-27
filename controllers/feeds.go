@@ -63,3 +63,21 @@ func DeleteFeed(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": input})
 }
+
+// PATCH /feeds
+// Update feed
+func PatchFeed(c *gin.Context) {
+	var input models.Feed
+	if err := c.ShouldBind(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := models.DB.Model(&input).Where("id = ?", input.ID).Updates(&input).Error
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"error": err})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": input})
+}
