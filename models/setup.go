@@ -28,6 +28,7 @@ func ConnectDatabase() {
 	}
 
 	database.AutoMigrate(&Feed{})
+	database.AutoMigrate(&SentItems{})
 
 	DB = database
 }
