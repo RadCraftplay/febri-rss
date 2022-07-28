@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/KonishchevDmitry/go-rss v0.0.0-20191207114205-40a828964875 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect

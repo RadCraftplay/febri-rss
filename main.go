@@ -18,5 +18,7 @@ func main() {
 	feeds.DELETE("", controllers.DeleteFeed)
 	feeds.PATCH("", controllers.PatchFeed)
 
+	r.GET("sent_items", controllers.SentItems)
+
 	r.Run(":2137")
 }
