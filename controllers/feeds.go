@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"febri-rss/common"
 	"febri-rss/models"
 
 	"github.com/gin-gonic/gin"
@@ -41,12 +42,29 @@ func CreateFeed(c *gin.Context) {
 		URL: input.URL,
 	}
 
-	db := models.DB.Exec(fmt.Sprintf("INSERT INTO %s VALUES (DEFAULT, ?, null)", feed.TableName()), feed.URL)
+	source, err := common.FetchSourceInfo(input.URL)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	err = CreateSource(*source)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	feed.SourceId = source.ID
+
+	db := models.DB.Exec(fmt.Sprintf("INSERT INTO %s VALUES (DEFAULT, ?, ?)", feed.TableName()), feed.URL, feed.SourceId)
 	if db.Error != nil {
 		// TODO: Return 409 Conflict instead?
 		c.JSON(http.StatusInternalServerError, gin.H{"error": db.Error.Error()})
 		return
 	}
+
+	affectedRow := db.Row()
+	affectedRow.Scan(feed.ID)
 
 	c.JSON(http.StatusOK, gin.H{"data": feed})
 }
