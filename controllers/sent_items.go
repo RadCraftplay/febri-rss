@@ -7,6 +7,7 @@ import (
 
 	"github.com/KonishchevDmitry/go-rss"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func isElementExist(s []models.SentItems, str string) bool {
@@ -52,6 +53,21 @@ func SentItems(c *gin.Context) {
 		for _, item := range data.Items {
 			if isElementExist(guids, item.Guid.Id) {
 				continue
+			}
+
+			e := models.Entry{
+				ID:          uuid.New(),
+				SourceId:    feed.SourceId,
+				Title:       item.Title,
+				Links:       []string{item.Link},
+				Description: &item.Description,
+				PubDate:     &item.Date.Time,
+			}
+
+			err = CreateEntry(e)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+				return
 			}
 
 			si := models.SentItems{
