@@ -15,7 +15,7 @@ func main() {
 	feeds := r.Group("feeds")
 	feeds.GET("", controllers.FindFeeds)
 	feeds.POST("", controllers.CreateFeed)
-	feeds.DELETE("", controllers.DeleteFeed)
+	feeds.DELETE(":id", controllers.DeleteFeed)
 	feeds.PATCH("", controllers.PatchFeed)
 
 	r.GET("sent_items", controllers.SentItems)

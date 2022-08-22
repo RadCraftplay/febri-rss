@@ -15,7 +15,7 @@ type CreateFeedInput struct {
 }
 
 type DeleteObjectInput struct {
-	Id uint `json:"id" binding:"required"`
+	Id uint `uri:"id" binding:"required"`
 }
 
 // GET /feeds
@@ -73,7 +73,7 @@ func CreateFeed(c *gin.Context) {
 // Delete feed
 func DeleteFeed(c *gin.Context) {
 	var input DeleteObjectInput
-	if err := c.ShouldBindJSON(&input); err != nil {
+	if err := c.ShouldBindUri(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
