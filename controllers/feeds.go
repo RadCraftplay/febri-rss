@@ -66,6 +66,9 @@ func CreateFeed(c *gin.Context) {
 	affectedRow := db.Row()
 	affectedRow.Scan(feed.ID)
 
+	// Schedule fetching items
+	common.EnqueueJob(FetchRssEntries)
+
 	c.JSON(http.StatusOK, gin.H{"data": feed})
 }
 
