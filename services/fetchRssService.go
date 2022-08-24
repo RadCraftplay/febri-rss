@@ -4,7 +4,6 @@ import (
 	"febri-rss/common"
 	"febri-rss/controllers"
 	"log"
-	"time"
 
 	"github.com/onatm/clockwerk"
 )
@@ -16,12 +15,12 @@ func (j FetchRssJob) Run() {
 	common.EnqueueJob(controllers.FetchRssEntries)
 }
 
-func StartFetchRssService() {
+func StartFetchRssService(configuration common.FebriRssConfiguration) {
 	log.Default().Println("Setting-up job scheduler...")
 	// Setup scheduler
 	var job FetchRssJob
 	c := clockwerk.New()
-	c.Every(6 * time.Hour).Do(job)
+	c.Every(configuration.Services.FetchRss.Period).Do(job)
 	c.Start()
 
 	// Schedule job first time

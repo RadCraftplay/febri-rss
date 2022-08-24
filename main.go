@@ -1,6 +1,7 @@
 package main
 
 import (
+	"febri-rss/common"
 	"febri-rss/controllers"
 	"febri-rss/models"
 	"febri-rss/services"
@@ -9,10 +10,12 @@ import (
 )
 
 func main() {
+	configuration := common.LoadConfiguration()
+
 	r := gin.Default()
 
 	models.ConnectDatabase()
-	services.SetupServices()
+	services.SetupServices(configuration)
 
 	feeds := r.Group("feeds")
 	feeds.GET("", controllers.FindFeeds)
