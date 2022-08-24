@@ -16,13 +16,13 @@ func getDefaultConfiguration() FebriRssConfiguration {
 	return FebriRssConfiguration{
 		struct {
 			FetchRss struct {
-				period time.Duration "yaml:\"period\""
+				Period time.Duration "yaml:\"period\""
 			}
 		}{
 			FetchRss: struct {
-				period time.Duration "yaml:\"period\""
+				Period time.Duration "yaml:\"period\""
 			}{
-				period: time.Hour * 6,
+				Period: time.Hour * 6,
 			},
 		},
 	}
@@ -68,7 +68,7 @@ func LoadConfiguration() FebriRssConfiguration {
 type FebriRssConfiguration struct {
 	Services struct {
 		FetchRss struct {
-			period time.Duration `yaml:"period"`
+			Period time.Duration `yaml:"period"`
 		}
 	}
 }
