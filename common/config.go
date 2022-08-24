@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	configFilename = "./config"
+	configFilename = "./config.yaml"
 )
 
 func getDefaultConfiguration() FebriRssConfiguration {
