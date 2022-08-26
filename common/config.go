@@ -25,6 +25,13 @@ func getDefaultConfiguration() FebriRssConfiguration {
 				Period: time.Hour * 6,
 			},
 		},
+		struct {
+			AppKey    string "yaml:\"appKey\""
+			AppSecret string "yaml:\"appSecret\""
+		}{
+			AppKey:    "<YOUR APP KEY>",
+			AppSecret: "<YOUR APP SECRET>",
+		},
 	}
 }
 
@@ -70,5 +77,9 @@ type FebriRssConfiguration struct {
 		FetchRss struct {
 			Period time.Duration `yaml:"period"`
 		}
+	}
+	FebriApi struct {
+		AppKey    string `yaml:"appKey"`
+		AppSecret string `yaml:"appSecret"`
 	}
 }

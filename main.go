@@ -15,6 +15,7 @@ func main() {
 	r := gin.Default()
 
 	models.ConnectDatabase()
+	controllers.SetupHttpClients(configuration)
 	services.SetupServices(configuration)
 
 	feeds := r.Group("feeds")

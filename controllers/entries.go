@@ -6,7 +6,6 @@ import (
 	"febri-rss/models"
 	"fmt"
 	"log"
-	"net/http"
 
 	"github.com/KonishchevDmitry/go-rss"
 	"github.com/google/uuid"
@@ -20,8 +19,7 @@ func CreateEntry(e models.Entry) error {
 	}
 
 	buff := bytes.NewBuffer(serialized)
-
-	resp, err := http.Post(
+	resp, err := FebriApiClient.Post(
 		fmt.Sprintf("%s:%d/api/entries", febri_server_host, febri_server_port),
 		"application/json",
 		buff)

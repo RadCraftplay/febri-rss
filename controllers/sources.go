@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"febri-rss/models"
 	"fmt"
-	"net/http"
 )
 
 const (
@@ -33,7 +32,7 @@ func CreateSource(s models.Source) error {
 
 	buff := bytes.NewBuffer(serialized)
 
-	resp, err := http.Post(
+	resp, err := FebriApiClient.Post(
 		fmt.Sprintf("%s:%d/api/sources", febri_server_host, febri_server_port),
 		"application/json",
 		buff)
