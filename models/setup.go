@@ -14,7 +14,7 @@ const (
 	port     = 5432
 	username = "febri"
 	password = "e3b3440172abd558bbd535eefbc36512a0a574b5360bc4d59d14fc9404dc8bbc"
-	dbname   = "febri"
+	dbname   = "febri_rss"
 )
 
 func ConnectDatabase() {

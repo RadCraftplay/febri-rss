@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"febri-rss/common"
@@ -56,7 +55,7 @@ func CreateFeed(c *gin.Context) {
 
 	feed.SourceId = source.ID
 
-	db := models.DB.Exec(fmt.Sprintf("INSERT INTO %s VALUES (DEFAULT, ?, ?)", feed.TableName()), feed.URL, feed.SourceId)
+	db := models.DB.Exec("INSERT INTO feeds VALUES (DEFAULT, ?, ?)", feed.URL, feed.SourceId)
 	if db.Error != nil {
 		// TODO: Return 409 Conflict instead?
 		c.JSON(http.StatusInternalServerError, gin.H{"error": db.Error.Error()})

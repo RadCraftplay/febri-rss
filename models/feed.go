@@ -7,7 +7,3 @@ type Feed struct {
 	URL      string    `json:"url"`
 	SourceId uuid.UUID `json:"source_id"`
 }
-
-func (Feed) TableName() string {
-	return "rss_service.feeds"
-}
