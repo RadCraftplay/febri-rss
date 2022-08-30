@@ -92,6 +92,7 @@ func FetchRssEntriesSingleFeed(feed models.Feed) {
 			SourceId:    feed.SourceId,
 			Title:       item.Title,
 			Links:       []string{item.Link},
+			GUID:        item.Guid.Id,
 			Description: &item.Description,
 			PubDate:     &item.Date.Time,
 		}

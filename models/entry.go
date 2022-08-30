@@ -11,6 +11,7 @@ type Entry struct {
 	SourceId    uuid.UUID  `json:"sourceId"`
 	Title       string     `json:"title"`
 	Links       []string   `json:"links"`
+	GUID        string     `json:"guid"`
 	Description *string    `json:"description"`
 	PubDate     *time.Time `json:"pubDate"`
 }
