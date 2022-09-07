@@ -14,11 +14,18 @@ func FetchSourceInfo(url string) (*models.Source, error) {
 		return nil, err
 	}
 
-	// TODO: Get author if available
+	var author = data.Author.Name
+	if author == "" {
+		author = data.Author.Email
+		if author == "" {
+			author = "febri-rss"
+		}
+	}
+
 	return &models.Source{
 		ID:            uuid.New(),
 		Name:          data.Title,
-		Author:        "febri-rss",
+		Author:        author,
 		Description:   &data.Description,
 		Links:         []string{url, data.Link},
 		Language:      &data.Language,
