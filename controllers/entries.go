@@ -69,6 +69,7 @@ func FetchRssEntriesSingleFeed(feed models.Feed) {
 	 * 5. If no errors, add all sources to our database
 	 */
 
+	// TODO(#2): Replace RSS library with a more flexible one
 	data, err := rss.Get(feed.URL)
 	if err != nil {
 		log.Default().Printf("WARNING: %s\n", err)
