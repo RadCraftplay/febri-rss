@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/KonishchevDmitry/go-rss"
 	"github.com/google/uuid"
+	"github.com/mmcdole/gofeed"
 )
 
 func CreateEntry(e models.Entry) error {
@@ -70,7 +70,8 @@ func FetchRssEntriesSingleFeed(feed models.Feed) {
 	 */
 
 	// TODO(#2): Replace RSS library with a more flexible one
-	data, err := rss.Get(feed.URL)
+	parser := gofeed.NewParser()
+	data, err := parser.ParseURL(feed.URL)
 	if err != nil {
 		log.Default().Printf("WARNING: %s\n", err)
 		return
@@ -84,7 +85,7 @@ func FetchRssEntriesSingleFeed(feed models.Feed) {
 	}
 
 	for _, item := range data.Items {
-		if isElementExist(guids, item.Guid.Id) {
+		if isElementExist(guids, item.GUID) {
 			continue
 		}
 
@@ -93,9 +94,9 @@ func FetchRssEntriesSingleFeed(feed models.Feed) {
 			SourceId:    feed.SourceId,
 			Title:       item.Title,
 			Links:       []string{item.Link},
-			GUID:        item.Guid.Id,
+			GUID:        item.GUID,
 			Description: &item.Description,
-			PubDate:     &item.Date.Time,
+			PubDate:     item.PublishedParsed,
 		}
 
 		err = CreateEntry(e)
@@ -106,7 +107,7 @@ func FetchRssEntriesSingleFeed(feed models.Feed) {
 
 		si := models.SentItems{
 			Feed_ID: feed.ID,
-			GUID:    item.Guid.Id,
+			GUID:    item.GUID,
 		}
 		models.DB.Create(&si)
 	}
