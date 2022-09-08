@@ -9,6 +9,7 @@ import (
 
 var DB *gorm.DB
 
+// TODO(#3): Move database settings and credentials to config.yaml
 const (
 	host     = "localhost"
 	port     = 5432
