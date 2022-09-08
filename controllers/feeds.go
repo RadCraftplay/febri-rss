@@ -41,7 +41,7 @@ func CreateFeed(c *gin.Context) {
 		URL: input.URL,
 	}
 
-	source, err := common.FetchSourceInfo(input.URL)
+	source, err := FetchSourceInfo(input.URL)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
