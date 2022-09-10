@@ -14,7 +14,7 @@ func main() {
 
 	r := gin.Default()
 
-	models.ConnectDatabase()
+	models.ConnectDatabase(configuration)
 	controllers.SetupHttpClients(configuration)
 	services.SetupServices(configuration)
 

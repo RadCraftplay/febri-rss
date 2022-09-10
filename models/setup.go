@@ -3,24 +3,23 @@ package models
 import (
 	"fmt"
 
+	"febri-rss/common"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
-// TODO(#3): Move database settings and credentials to config.yaml
-const (
-	host     = "localhost"
-	port     = 5432
-	username = "febri"
-	password = "e3b3440172abd558bbd535eefbc36512a0a574b5360bc4d59d14fc9404dc8bbc"
-	dbname   = "febri_rss"
-)
-
-func ConnectDatabase() {
+func ConnectDatabase(configuration common.FebriRssConfiguration) {
 	database, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable", host, username, password, dbname, port),
+		DSN: fmt.Sprintf(
+			"host=%s user=%s password=%s dbname=%s port=%d sslmode=disable",
+			configuration.Postgres.Host,
+			configuration.Postgres.Username,
+			configuration.Postgres.Password,
+			configuration.Postgres.DbName,
+			configuration.Postgres.Port),
 		PreferSimpleProtocol: true,
 	}), &gorm.Config{})
 
