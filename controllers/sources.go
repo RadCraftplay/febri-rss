@@ -23,11 +23,16 @@ func FetchSourceInfo(url string) (*models.Source, error) {
 		return nil, err
 	}
 
-	var author = data.Author.Name
+	var author = ""
+
+	if data.Author == nil {
+		author = "febri-rss"
+	}
+
 	if author == "" {
-		author = data.Author.Email
+		author = data.Author.Name
 		if author == "" {
-			author = "febri-rss"
+			author = data.Author.Email
 		}
 	}
 
