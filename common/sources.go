@@ -3,20 +3,29 @@ package common
 import (
 	"febri-rss/models"
 
-	"github.com/KonishchevDmitry/go-rss"
 	"github.com/google/uuid"
+	"github.com/mmcdole/gofeed"
 )
 
 func FetchSourceInfo(url string) (*models.Source, error) {
-	data, err := rss.Get(url)
+	parser := gofeed.NewParser()
+	data, err := parser.ParseURL(url)
 	if err != nil {
 		return nil, err
+	}
+
+	var author = data.Author.Name
+	if author == "" {
+		author = data.Author.Email
+		if author == "" {
+			author = "febri-rss"
+		}
 	}
 
 	return &models.Source{
 		ID:            uuid.New(),
 		Name:          data.Title,
-		Author:        "febri-rss",
+		Author:        author,
 		Description:   &data.Description,
 		Links:         []string{url, data.Link},
 		Language:      &data.Language,
