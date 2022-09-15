@@ -69,7 +69,6 @@ func FetchRssEntriesSingleFeed(feed models.Feed) {
 	 * 5. If no errors, add all sources to our database
 	 */
 
-	// TODO(#2): Replace RSS library with a more flexible one
 	parser := gofeed.NewParser()
 	data, err := parser.ParseURL(feed.URL)
 	if err != nil {
