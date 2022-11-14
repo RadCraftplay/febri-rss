@@ -13,7 +13,7 @@ import (
 // TODO(#4): Move Febri server settings to config.yaml
 const (
 	febri_server_host = "http://localhost"
-	febri_server_port = 5286
+	febri_server_port = 5000
 )
 
 func FetchSourceInfo(url string) (*models.Source, error) {
