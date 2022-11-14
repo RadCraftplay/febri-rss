@@ -62,7 +62,6 @@ func CreateFeed(c *gin.Context) {
 		return
 	}
 
-	// TODO(#1): Fetch only one feed
 	common.EnqueueJob(func() {
 		FetchRssEntriesFromSingleFeedGivenUrl(feed.URL)
 	})
