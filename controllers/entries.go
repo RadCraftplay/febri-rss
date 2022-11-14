@@ -60,6 +60,15 @@ func FetchRssEntries() {
 	log.Default().Println("Finished fetching rss entries!")
 }
 
+func FetchRssEntriesFromSingleFeedGivenUrl(feedUrl string) {
+	var feed models.Feed
+	models.DB.Where("url = ?", feedUrl).First(&feed)
+
+	log.Default().Printf("Fetching entries for feed: %d (%s)", feed.ID, feed.URL)
+	FetchRssEntriesSingleFeed(feed)
+	log.Default().Printf("Finished fetching entries for feed: %d (%s)!", feed.ID, feed.URL)
+}
+
 func FetchRssEntriesSingleFeed(feed models.Feed) {
 	/* So the algorithm goes like this:
 	 * 1. Get the feed data

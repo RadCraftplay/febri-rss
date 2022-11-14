@@ -62,12 +62,10 @@ func CreateFeed(c *gin.Context) {
 		return
 	}
 
-	affectedRow := db.Row()
-	affectedRow.Scan(feed.ID)
-
-	// Schedule fetching items
 	// TODO(#1): Fetch only one feed
-	common.EnqueueJob(FetchRssEntries)
+	common.EnqueueJob(func() {
+		FetchRssEntriesFromSingleFeedGivenUrl(feed.URL)
+	})
 
 	c.JSON(http.StatusOK, gin.H{"data": feed})
 }
