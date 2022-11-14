@@ -5,7 +5,6 @@ import (
 	"net/http"
 )
 
-// TODO(#4): Move Febri server settings to config.yaml
 var (
 	FebriApiClient    *http.Client
 	febri_server_host string
