@@ -5,7 +5,12 @@ import (
 	"net/http"
 )
 
-var FebriApiClient *http.Client
+// TODO(#4): Move Febri server settings to config.yaml
+var (
+	FebriApiClient    *http.Client
+	febri_server_host string
+	febri_server_port int
+)
 
 type withHeader struct {
 	http.Header
@@ -39,4 +44,7 @@ func SetupHttpClients(configuration common.FebriRssConfiguration) {
 	rt.Set("XAppKey", configuration.FebriApi.AppKey)
 	rt.Set("XAppSecret", configuration.FebriApi.AppSecret)
 	FebriApiClient.Transport = rt
+
+	febri_server_host = configuration.FebriApi.Host
+	febri_server_port = configuration.FebriApi.Port
 }

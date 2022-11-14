@@ -28,7 +28,11 @@ func getDefaultConfiguration() FebriRssConfiguration {
 		struct {
 			AppKey    string "yaml:\"appKey\""
 			AppSecret string "yaml:\"appSecret\""
+			Host      string "yaml:\"host\""
+			Port      int    "yaml:\"port\""
 		}{
+			Host:      "http://localhost",
+			Port:      5000,
 			AppKey:    "<YOUR APP KEY>",
 			AppSecret: "<YOUR APP SECRET>",
 		},
@@ -94,6 +98,8 @@ type FebriRssConfiguration struct {
 	FebriApi struct {
 		AppKey    string `yaml:"appKey"`
 		AppSecret string `yaml:"appSecret"`
+		Host      string `yaml:"host"`
+		Port      int    `yaml:"port"`
 	}
 	Postgres struct {
 		Host     string `yaml:"host"`
