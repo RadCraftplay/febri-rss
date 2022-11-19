@@ -27,6 +27,16 @@ func ConnectDatabase(configuration common.FebriRssConfiguration) {
 		panic("Failed to connect to database!")
 	}
 
+	db, err := database.DB()
+	if err != nil {
+		panic("Error getting databse out of *gorm.DB!")
+	}
+
+	err = db.Ping()
+	if err != nil {
+		panic("Failed to ping the database!")
+	}
+
 	database.AutoMigrate(&Feed{})
 	database.AutoMigrate(&SentItems{})
 
