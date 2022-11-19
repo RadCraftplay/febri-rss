@@ -4,29 +4,33 @@ import (
 	"febri-rss/common"
 	"febri-rss/controllers"
 	"log"
-	"time"
 
 	"github.com/onatm/clockwerk"
 )
 
-type PurgeNotUpdatedFeedsJob struct{}
+type PurgeNotUpdatedFeedsJob struct {
+	removeAfterDays uint
+}
 
 func (j PurgeNotUpdatedFeedsJob) Run() {
 	log.Default().Println("Running periodic feed purge...")
 	common.EnqueueJob(func() {
-		err := controllers.PurgeNotUpdatedFeeds(180)
+		err := controllers.PurgeNotUpdatedFeeds(j.removeAfterDays)
 		if err != nil {
 			log.Default().Printf("WARNING: Unable to purge not updated feeds: %s", err)
 			return
 		}
-		log.Default().Printf("Finished purging feeds not updated for over %d days", 180)
+		log.Default().Printf("Finished purging feeds not updated for over %d days", j.removeAfterDays)
 	})
 }
 
-func StartPurgeNotUpdatedFeedsService() {
-	var job PurgeNotUpdatedFeedsJob
+func StartPurgeNotUpdatedFeedsService(configuration common.FebriRssConfiguration) {
+	var job PurgeNotUpdatedFeedsJob = PurgeNotUpdatedFeedsJob{
+		removeAfterDays: configuration.Services.PurgeNotUpdatedFeeds.PurgeAfterDays,
+	}
+
 	c := clockwerk.New()
-	c.Every(time.Hour * 24 * 30).Do(job)
+	c.Every(configuration.Services.PurgeNotUpdatedFeeds.Every).Do(job)
 	c.Start()
 
 	// Schedule job first time

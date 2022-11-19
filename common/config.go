@@ -18,11 +18,22 @@ func getDefaultConfiguration() FebriRssConfiguration {
 			FetchRss struct {
 				Period time.Duration "yaml:\"period\""
 			}
+			PurgeNotUpdatedFeeds struct {
+				Every          time.Duration "yaml:\"every\""
+				PurgeAfterDays uint          "yaml:\"purgeAfterDays\""
+			}
 		}{
 			FetchRss: struct {
 				Period time.Duration "yaml:\"period\""
 			}{
 				Period: time.Hour * 6,
+			},
+			PurgeNotUpdatedFeeds: struct {
+				Every          time.Duration "yaml:\"every\""
+				PurgeAfterDays uint          "yaml:\"purgeAfterDays\""
+			}{
+				Every:          30 * 24 * time.Hour,
+				PurgeAfterDays: 360,
 			},
 		},
 		struct {
@@ -93,6 +104,10 @@ type FebriRssConfiguration struct {
 	Services struct {
 		FetchRss struct {
 			Period time.Duration `yaml:"period"`
+		}
+		PurgeNotUpdatedFeeds struct {
+			Every          time.Duration `yaml:"every"`
+			PurgeAfterDays uint          `yaml:"purgeAfterDays"`
 		}
 	}
 	FebriApi struct {
