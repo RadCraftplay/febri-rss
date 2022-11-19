@@ -6,6 +6,7 @@ import (
 	"febri-rss/models"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/mmcdole/gofeed"
@@ -54,7 +55,13 @@ func FetchRssEntries() {
 	log.Default().Println("Fetching rss entries...")
 
 	for _, feed := range feeds {
-		FetchRssEntriesSingleFeed(feed)
+		updated_time, time := FetchRssEntriesSingleFeed(feed)
+		if updated_time {
+			err := UpdateFeedPublishedTime(feed.ID, time)
+			if err != nil {
+				log.Default().Printf("WARNING: Unable to update feed LastUpdated time: %s", err)
+			}
+		}
 	}
 
 	log.Default().Println("Finished fetching rss entries!")
@@ -65,11 +72,17 @@ func FetchRssEntriesFromSingleFeedGivenUrl(feedUrl string) {
 	models.DB.Where("url = ?", feedUrl).First(&feed)
 
 	log.Default().Printf("Fetching entries for feed: %d (%s)", feed.ID, feed.URL)
-	FetchRssEntriesSingleFeed(feed)
+	updated_time, time := FetchRssEntriesSingleFeed(feed)
+	if updated_time {
+		err := UpdateFeedPublishedTime(feed.ID, time)
+		if err != nil {
+			log.Default().Printf("WARNING: Unable to update feed LastUpdated time: %s", err)
+		}
+	}
 	log.Default().Printf("Finished fetching entries for feed: %d (%s)!", feed.ID, feed.URL)
 }
 
-func FetchRssEntriesSingleFeed(feed models.Feed) {
+func FetchRssEntriesSingleFeed(feed models.Feed) (bool, *time.Time) {
 	/* So the algorithm goes like this:
 	 * 1. Get the feed data
 	 * 2. Get all sent item info FOR THAT FEED from the database
@@ -82,15 +95,17 @@ func FetchRssEntriesSingleFeed(feed models.Feed) {
 	data, err := parser.ParseURL(feed.URL)
 	if err != nil {
 		log.Default().Printf("WARNING: %s\n", err)
-		return
+		return false, nil
 	}
 
 	var guids []models.SentItems
 	dbc := models.DB.Where("feed_id = ?", feed.ID).Select("guid").Find(&guids)
 	if dbc.Error != nil {
 		log.Default().Printf("WARNING: %s\n", dbc.Error)
-		return
+		return false, nil
 	}
+
+	var lastUpdated *time.Time = nil
 
 	for _, item := range data.Items {
 		if isElementExist(guids, item.GUID) {
@@ -110,7 +125,11 @@ func FetchRssEntriesSingleFeed(feed models.Feed) {
 		err = CreateEntry(e)
 		if err != nil {
 			log.Default().Printf("WARNING: %s\n", err)
-			return
+			return lastUpdated != nil, lastUpdated
+		}
+
+		if lastUpdated == nil || lastUpdated.Before(*e.PubDate) {
+			lastUpdated = e.PubDate
 		}
 
 		si := models.SentItems{
@@ -119,4 +138,6 @@ func FetchRssEntriesSingleFeed(feed models.Feed) {
 		}
 		models.DB.Create(&si)
 	}
+
+	return lastUpdated != nil, lastUpdated
 }
