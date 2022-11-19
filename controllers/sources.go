@@ -27,6 +27,9 @@ func FetchSourceInfo(url string) (*models.Source, error) {
 		author = data.Author.Name
 		if author == "" {
 			author = data.Author.Email
+			if author == "" {
+				author = "febri-rss"
+			}
 		}
 	}
 
