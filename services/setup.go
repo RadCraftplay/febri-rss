@@ -11,6 +11,7 @@ func SetupServices(configuration common.FebriRssConfiguration) {
 	log.Default().Println("Background worker started!")
 
 	log.Default().Println("Starting services...")
+	StartPurgeNotUpdatedFeedsService()
 	StartFetchRssService(configuration)
 	log.Default().Println("Services started!")
 }

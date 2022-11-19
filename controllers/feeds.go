@@ -105,3 +105,7 @@ func PatchFeed(c *gin.Context) {
 func UpdateFeedPublishedTime(id uint, time *time.Time) error {
 	return models.DB.Exec("UPDATE feeds SET last_updated = ? WHERE id = ?", time, id).Error
 }
+
+func PurgeNotUpdatedFeeds(afterDays uint) error {
+	return models.DB.Exec("delete from feeds where now() - last_updated > ? * '1 day'::interval", afterDays).Error
+}
