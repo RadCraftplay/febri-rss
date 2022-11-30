@@ -24,5 +24,5 @@ func main() {
 	feeds.DELETE(":id", controllers.DeleteFeed)
 	feeds.PATCH("", controllers.PatchFeed)
 
-	r.Run(":2137")
+	r.Run(":1337")
 }
