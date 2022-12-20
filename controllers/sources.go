@@ -40,7 +40,7 @@ func FetchSourceInfo(url string) (*models.Source, error) {
 		Description:   &data.Description,
 		Links:         []string{url, data.Link},
 		Language:      &data.Language,
-		ApplicationId: uuid.MustParse("405f4499-6e46-442e-8e14-a59f6733ed26"),
+		ApplicationId: uuid.MustParse(febri_app_key),
 	}, nil
 }
 

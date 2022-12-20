@@ -9,6 +9,7 @@ var (
 	FebriApiClient    *http.Client
 	febri_server_host string
 	febri_server_port int
+	febri_app_key     string
 )
 
 type withHeader struct {
@@ -46,4 +47,5 @@ func SetupHttpClients(configuration common.FebriRssConfiguration) {
 
 	febri_server_host = configuration.FebriApi.Host
 	febri_server_port = configuration.FebriApi.Port
+	febri_app_key = configuration.FebriApi.AppKey
 }
