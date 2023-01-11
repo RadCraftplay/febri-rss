@@ -18,9 +18,8 @@ func main() {
 	controllers.SetupHttpClients(configuration)
 	services.SetupServices(configuration)
 
-	feeds := r.Group("feeds")
-	feeds.GET("", controllers.FindFeeds)
-	feeds.POST("", controllers.CreateFeed)
+	messages := r.Group("febri-message")
+	messages.POST("", controllers.PostMessage)
 
 	r.Run(":1337")
 }
