@@ -52,12 +52,14 @@ func CreateFeed(c *gin.Context) {
 
 	feed.SourceId = source.ID
 
-	db := models.DB.Exec("INSERT INTO feeds VALUES (DEFAULT, ?, ?)", feed.URL, feed.SourceId)
+	var id uint
+	db := models.DB.Raw("INSERT INTO feeds VALUES (DEFAULT, ?, ?) RETURNING ID", feed.URL, feed.SourceId).Scan(&id)
 	if db.Error != nil {
 		// TODO: Return 409 Conflict instead?
 		c.JSON(http.StatusInternalServerError, gin.H{"error": db.Error.Error()})
 		return
 	}
+	feed.ID = id
 
 	common.EnqueueJob(func() {
 		FetchRssEntriesFromSingleFeedGivenUrl(feed.URL)
