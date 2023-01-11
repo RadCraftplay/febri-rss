@@ -14,10 +14,6 @@ type CreateFeedInput struct {
 	URL string `json:"url" binding:"required"`
 }
 
-type DeleteObjectInput struct {
-	Id uint `uri:"id" binding:"required"`
-}
-
 // GET /feeds
 // Get all feeds
 func FindFeeds(c *gin.Context) {
@@ -68,38 +64,6 @@ func CreateFeed(c *gin.Context) {
 	})
 
 	c.JSON(http.StatusOK, gin.H{"data": feed})
-}
-
-// DELETE /feeds
-// Delete feed
-func DeleteFeed(c *gin.Context) {
-	var input DeleteObjectInput
-	if err := c.ShouldBindUri(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	models.DB.Delete(&models.Feed{}, input.Id)
-
-	c.JSON(http.StatusOK, gin.H{"data": input})
-}
-
-// PATCH /feeds
-// Update feed
-func PatchFeed(c *gin.Context) {
-	var input models.Feed
-	if err := c.ShouldBind(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	err := models.DB.Model(&input).Where("id = ?", input.ID).Updates(&input).Error
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"error": err})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": input})
 }
 
 func UpdateFeedPublishedTime(id uint, time *time.Time) error {
