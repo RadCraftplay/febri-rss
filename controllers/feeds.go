@@ -62,7 +62,7 @@ func CreateFeed(c *gin.Context) {
 	feed.ID = id
 
 	common.EnqueueJob(func() {
-		FetchRssEntriesFromSingleFeedGivenUrl(feed.URL)
+		FetchRssEntriesSingleFeed(feed)
 	})
 
 	c.JSON(http.StatusOK, gin.H{"data": feed})

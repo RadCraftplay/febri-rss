@@ -67,21 +67,6 @@ func FetchRssEntries() {
 	log.Default().Println("Finished fetching rss entries!")
 }
 
-func FetchRssEntriesFromSingleFeedGivenUrl(feedUrl string) {
-	var feed models.Feed
-	models.DB.Where("url = ?", feedUrl).First(&feed)
-
-	log.Default().Printf("Fetching entries for feed: %d (%s)", feed.ID, feed.URL)
-	updated_time, time := FetchRssEntriesSingleFeed(feed)
-	if updated_time {
-		err := UpdateFeedPublishedTime(feed.ID, time)
-		if err != nil {
-			log.Default().Printf("WARNING: Unable to update feed LastUpdated time: %s", err)
-		}
-	}
-	log.Default().Printf("Finished fetching entries for feed: %d (%s)!", feed.ID, feed.URL)
-}
-
 func FetchRssEntriesSingleFeed(feed models.Feed) (bool, *time.Time) {
 	/* So the algorithm goes like this:
 	 * 1. Get the feed data
